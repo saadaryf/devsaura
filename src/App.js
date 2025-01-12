@@ -2,7 +2,7 @@
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import NeonScene from './components/NeonScene';
+import NeonScene from './components/neon/NeonScene';
 
 const App = () => {
   return (
