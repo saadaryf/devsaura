@@ -1,10 +1,29 @@
-// App.js
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import NeonScene from './components/neon/NeonScene';
+import { LoadingScreen } from './components/neon/LoadingScreen';
 
 const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+
+  useEffect(() => {
+    // Simulate loading progress
+    const interval = setInterval(() => {
+      setLoadingProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          setTimeout(() => setIsLoading(false), 500); // Small delay before transition
+          return 100;
+        }
+        return prev + 1;
+      });
+    }, 30);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div style={{ width: '100vw', height: '100vh', background: '#000' }}>
       <Canvas
@@ -19,17 +38,21 @@ const App = () => {
           powerPreference: "high-performance",
         }}
       >
-        <Suspense fallback={null}>
-          <NeonScene />
-          <OrbitControls
-            enableZoom={false}
-            enablePan={false}
-            maxPolarAngle={Math.PI / 1.5}
-            minPolarAngle={Math.PI / 2.5}
-            autoRotate
-            autoRotateSpeed={0.5}
-          />
-        </Suspense>
+        {isLoading ? (
+          <LoadingScreen progress={loadingProgress} />
+        ) : (
+          <Suspense fallback={null}>
+            <NeonScene />
+            <OrbitControls
+              enableZoom={false}
+              enablePan={false}
+              maxPolarAngle={Math.PI / 1.5}
+              minPolarAngle={Math.PI / 2.5}
+              autoRotate
+              autoRotateSpeed={0.5}
+            />
+          </Suspense>
+        )}
         <ambientLight intensity={0.3} />
       </Canvas>
     </div>

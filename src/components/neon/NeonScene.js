@@ -2,6 +2,7 @@ import React from 'react';
 import { NeonWord } from './NeonWord';
 import { DevParticleSystem } from './DevParticleSystem';
 import { SceneAtmosphere } from './SceneAtmosphere';
+import NeonTrails from './NeonTrails';
 
 const NeonScene = () => {
     return (
@@ -20,6 +21,7 @@ const NeonScene = () => {
             />
             <DevParticleSystem />
             <SceneAtmosphere />
+            <NeonTrails />
         </>
     );
 };
