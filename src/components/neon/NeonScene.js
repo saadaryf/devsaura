@@ -10,7 +10,7 @@ const NeonScene = () => {
             <NeonWord
                 text="DEVS"
                 position={[-2.5, 0, 0]}
-                color={0xff00ff}
+                color={0x00ffff}
                 wordMix={0}
             />
             <NeonWord
