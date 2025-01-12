@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useCallback } from 'react';
+import React, { useRef, useMemo, useCallback, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { Text3D } from '@react-three/drei';
@@ -6,6 +6,16 @@ import { DEV_SYMBOLS, KEYWORDS } from './constants/devSymbols';
 import { CodeParticle } from './CodeParticle';
 
 export const DevParticleSystem = () => {
+    const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
+    
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentTime(new Date().toLocaleTimeString());
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     const createParticles = useCallback(() => {
         const items = [];
         // Matrix-style falling code particles
@@ -23,8 +33,8 @@ export const DevParticleSystem = () => {
             });
         }
 
-        // Floating keywords
-        for (let i = 0; i < 30; i++) {
+        // Static keywords
+        for (let i = 0; i < KEYWORDS.length; i++) {
             items.push({
                 type: 'keyword',
                 position: [
@@ -32,14 +42,25 @@ export const DevParticleSystem = () => {
                     (Math.random() - 0.5) * 20,
                     (Math.random() - 0.5) * 20
                 ],
-                text: KEYWORDS[Math.floor(Math.random() * KEYWORDS.length)],
+                text: KEYWORDS[i],
                 color: new THREE.Color(0x00ffff),
                 scale: 0.2 + Math.random() * 0.3
             });
         }
 
+        // Add a fixed position for the time display
+        items.push({
+            type: 'time',
+            position: [
+                (Math.random() - 0.5) * 20,
+                (Math.random() - 0.5) * 20,
+                (Math.random() - 0.5) * 20
+            ],
+            scale: 0.2 + Math.random() * 0.3
+        });
+
         return items;
-    }, []);
+    }, []); // No dependencies since we don't need to recreate particles
 
     const particles = useMemo(() => createParticles(), [createParticles]);
     const floatingParticlesRef = useRef();
@@ -73,6 +94,24 @@ export const DevParticleSystem = () => {
                         {particle.text}
                         <meshBasicMaterial
                             color={particle.color}
+                            transparent
+                            opacity={0.6}
+                            blending={THREE.AdditiveBlending}
+                        />
+                    </Text3D>
+                ))}
+                {/* Separate time display with fixed position */}
+                {particles.filter(p => p.type === 'time').map((particle, i) => (
+                    <Text3D
+                        key={`time-${i}`}
+                        font="/fonts/helvetiker_regular.typeface.json"
+                        size={particle.scale}
+                        height={0.02}
+                        position={particle.position}
+                    >
+                        {currentTime}
+                        <meshBasicMaterial
+                            color={new THREE.Color(0xff3366)}
                             transparent
                             opacity={0.6}
                             blending={THREE.AdditiveBlending}

@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import NeonScene from './components/neon/NeonScene';
 import { LoadingScreen } from './components/neon/LoadingScreen';
+import CodeButton from './components/neon/CodeButton';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,7 +15,7 @@ const App = () => {
       setLoadingProgress(prev => {
         if (prev >= 100) {
           clearInterval(interval);
-          setTimeout(() => setIsLoading(false), 500); // Small delay before transition
+          setTimeout(() => setIsLoading(false), 200);
           return 100;
         }
         return prev + 1;
@@ -26,6 +27,7 @@ const App = () => {
 
   return (
     <div style={{ width: '100vw', height: '100vh', background: '#000' }}>
+      <CodeButton />
       <Canvas
         camera={{ position: [0, 0, 5], fov: 75 }}
         style={{

@@ -13,27 +13,3 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
 }
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
-  background: #00ffff;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 0 10px #00ffff;
-}
-
-input[type="range"]::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  background: #00ffff;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 0 10px #00ffff;
-  border: none;
-}
-
-input[type="range"]:focus {
-  outline: none;
-}
